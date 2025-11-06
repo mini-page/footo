@@ -36,11 +36,15 @@ $FunctionContent = @"
 function footo {
     # This function calls the footo.exe and handles the 'run' command's output.
     $output = & footo.exe $args
-    if ($args[0] -eq 'run' -and $LASTEXITCODE -eq 0) {
-        # If the command was 'run' and successful, execute the output
-        Invoke-Expression $output
+    if (@($args).Count -gt 0) {
+        if ($args[0] -eq 'run' -and $LASTEXITCODE -eq 0) {
+            # If the command was 'run' and successful, execute the output
+            Invoke-Expression $output
+        } else {
+            # Otherwise, just print the output
+            Write-Output $output
+        }
     } else {
-        # Otherwise, just print the output
         Write-Output $output
     }
 }
@@ -48,19 +52,13 @@ function footo {
 Set-Content -Path $ProfileScript -Value $FunctionContent
 Write-Host "Created profile script at $ProfileScript" -ForegroundColor Green
 
-# 6. Update PowerShell profile
-$PsProfile = $PROFILE
-if (-not (Test-Path $PsProfile)) {
-    New-Item -Path $PsProfile -ItemType File -Force | Out-Null
-}
-$ProfileContent = Get-Content $PsProfile
-$SourceLine = ". \"$ProfileScript\""
-if ($ProfileContent -notcontains $SourceLine) {
-    Add-Content -Path $PsProfile -Value "`n# Initialize Footo`n$SourceLine"
-    Write-Host "Added Footo initialization to your PowerShell profile." -ForegroundColor Yellow
-    Write-Host "Please restart your terminal to complete the installation." -ForegroundColor Yellow
-} else {
-    Write-Host "Footo is already initialized in your PowerShell profile." -ForegroundColor Green
-}
+# 6. Manual Instruction for PowerShell profile update
+Write-Host "`nIMPORTANT: Automated PowerShell profile update failed." -ForegroundColor Red
+Write-Host "Please manually add the following line to your PowerShell profile (usually at $PROFILE):" -ForegroundColor Yellow
+Write-Host "" -ForegroundColor Yellow
+Write-Host ". 'C:\Users\umang\.footo\footo-init.ps1'" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Yellow
+Write-Host "You can open your profile by typing 'notepad $PROFILE' in PowerShell." -ForegroundColor Yellow
+Write-Host "After adding the line, save the file and restart your terminal." -ForegroundColor Yellow
 
 Write-Host "`nInstallation complete!" -ForegroundColor Cyan

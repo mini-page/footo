@@ -6,7 +6,7 @@ import argparse
 import subprocess
 from pathlib import Path
 
-FOTO_DIR = Path.cwd() / ".footo"
+FOTO_DIR = Path.home() / ".footo"
 MODULES_DIR = FOTO_DIR / "modules"
 LOCAL_MODULES_DIR = MODULES_DIR / "local"
 BUNDLED_MODULES_DIR = MODULES_DIR / "bundled"
