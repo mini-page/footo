@@ -1,7 +1,0 @@
-{
-  "name": "my-test-module",
-  "version": "0.1.0",
-  "description": "A new my-test-module module.",
-  "lang": "bash",
-  "entry": "script.sh"
-}
